@@ -1,11 +1,8 @@
-abstract class SeasoningD extends Foo{}
+package io.Artoria.Chapter5;
 
-class Salt extends SeasoningD {}
-class Pepper extends SeasoningD {}
-class Thyme extends SeasoningD {}
-class Sage extends SeasoningD {}
+import io.Artoria.Foo;
 
-abstract class PointD extends Foo{
+abstract class PointD extends Foo {
     int x;
     int y;
     PointD(int _x, int _y) {
@@ -669,7 +666,7 @@ public class Main {
         PieD pieD = new Topping(new Salmon(),
                 new Topping(new Tuna(),
                 new Topping(new Anchovyy(),
-                        new Bottom())));
+                new Bottom())));
 
         System.out.println(pieD.toString());
         System.out.println(pieD.remA());
@@ -679,7 +676,7 @@ public class Main {
         PieD pieI = new Topping(new Salmon(),
                 new Topping(new Integer(5),
                 new Topping(new Integer(3),
-                        new Bottom())));
+                new Bottom())));
         System.out.println(pieI.toString());
         System.out.println(pieI.remInt(3));
         System.out.println(pieI.rem(3));
