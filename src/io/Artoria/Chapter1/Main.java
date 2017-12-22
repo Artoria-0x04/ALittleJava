@@ -1,13 +1,13 @@
 package io.Artoria.Chapter1;
 
-import io.Artoria.Foo;
+import io.Artoria.MyToString;
 
 
-abstract class SeasoningD extends Foo {}
+abstract class SeasoningD extends MyToString {}
 class Salt extends SeasoningD {}
 class Sage extends SeasoningD {}
 
-abstract class PointD extends Foo{
+abstract class PointD extends MyToString {
     int x;
     int y;
     PointD(int _x, int _y) {
@@ -38,7 +38,7 @@ class ManhattanPt extends PointD {
     }
 }
 
-abstract class NumD extends Foo {}
+abstract class NumD extends MyToString {}
 
 class Zero extends NumD {}
 class OneMoreThan extends NumD {
@@ -49,7 +49,7 @@ class OneMoreThan extends NumD {
     // -------------------------------------
 }
 
-abstract class LayerD extends Foo {}
+abstract class LayerD extends MyToString {}
 
 class Base extends LayerD {
     Object o;
@@ -66,7 +66,7 @@ class Slice extends LayerD {
     // ---------------------------------
 }
 
-abstract class ShishD extends Foo {
+abstract class ShishD extends MyToString {
     abstract boolean onlyOnions();
     abstract boolean isVegetarian();
 }
@@ -123,7 +123,7 @@ class Tomato extends ShishD {
     }
 }
 
-abstract class KebabD extends Foo {
+abstract class KebabD extends MyToString {
     abstract boolean isVeggie();
     abstract Object whatHolder();
 }
@@ -209,13 +209,13 @@ class Zucchini extends KebabD {
     }
 }
 
-abstract class RodD extends Foo {}
+abstract class RodD extends MyToString {}
 
 class Dagger extends RodD {}
 class Sabre extends RodD {}
 class Sword extends RodD {}
 
-abstract class PizzaD extends Foo {
+abstract class PizzaD extends MyToString {
     abstract PizzaD removeAnchovy();
     abstract PizzaD topAnchovyWithCheese();
     abstract PizzaD substituteAnchovyByCheese();
@@ -364,9 +364,10 @@ public class Main {
                 new Dagger()))));
         System.out.println(
                 pt.toString() + "\n" +
-                n.toString()+"\n"+
-                shish.toString() +"\n"+
-                shish.onlyOnions()
+                n.toString() + "\n" +
+                shish.toString() + "\n" +
+                shish.onlyOnions() + "\n" +
+                kebab.toString()
         );
         System.out.println(kebab.isVeggie());
         System.out.println(kebab.whatHolder());

@@ -1,8 +1,8 @@
 package io.Artoria.Chapter5;
 
-import io.Artoria.Foo;
+import io.Artoria.MyToString;
 
-abstract class PointD extends Foo {
+abstract class PointD extends MyToString {
     int x;
     int y;
     PointD(int _x, int _y) {
@@ -33,7 +33,7 @@ class ManhattanPt extends PointD {
     }
 }
 
-abstract class NumD extends Foo {}
+abstract class NumD extends MyToString {}
 
 class Zero extends NumD {
     public boolean equals(Object o) {
@@ -55,7 +55,7 @@ class OneMoreThan extends NumD {
     }
 }
 
-abstract class LayerD extends Foo {}
+abstract class LayerD extends MyToString {}
 
 class Base extends LayerD {
     Object o;
@@ -72,13 +72,14 @@ class Slice extends LayerD {
     // ---------------------------------
 }
 
-abstract class ShishD extends Foo {
+abstract class ShishD extends MyToString {
     OnlyOnionsV ooFn = new OnlyOnionsV();
     IsVegetarianV ivFn = new IsVegetarianV();
     abstract boolean onlyOnions();
     abstract boolean isVegetarian();
 }
-class OnlyOnionsV extends Foo {
+
+class OnlyOnionsV extends MyToString {
     boolean forSkewer() {
         return true;
     }
@@ -92,7 +93,8 @@ class OnlyOnionsV extends Foo {
         return false;
     }
 }
-class IsVegetarianV extends Foo {
+
+class IsVegetarianV extends MyToString {
     boolean forSkewer() {
         return true;
     }
@@ -159,7 +161,7 @@ class Tomato extends ShishD {
     }
 }
 
-abstract class KebabD extends Foo {
+abstract class KebabD extends MyToString {
     abstract boolean isVeggie();
     abstract Object whatHolder();
 }
@@ -245,13 +247,13 @@ class Zucchini extends KebabD {
     }
 }
 
-abstract class RodD extends Foo {}
+abstract class RodD extends MyToString {}
 
 class Dagger extends RodD {}
 class Sabre extends RodD {}
 class Sword extends RodD {}
 
-abstract class PizzaD extends Foo {
+abstract class PizzaD extends MyToString {
     RemoveAnchovyV remFn = new RemoveAnchovyV();
     TopAnchovyWithCheese topFn = new TopAnchovyWithCheese();
     SubstituteAnchovyByCheese subFn = new SubstituteAnchovyByCheese();
@@ -263,7 +265,7 @@ abstract class PizzaD extends Foo {
     abstract PizzaD substituteAnchovyByCheese();
 }
 
-class RemoveAnchovyV extends Foo {
+class RemoveAnchovyV extends MyToString {
     PizzaD forCrust() {
         return new Crust();
     }
@@ -289,7 +291,7 @@ class RemoveAnchovyV extends Foo {
     }
 }
 
-class TopAnchovyWithCheese extends Foo {
+class TopAnchovyWithCheese extends MyToString {
     PizzaD forCrust() {
         return new Crust();
     }
@@ -315,7 +317,7 @@ class TopAnchovyWithCheese extends Foo {
     }
 }
 
-class SubstituteAnchovyByCheese extends Foo {
+class SubstituteAnchovyByCheese extends MyToString {
     PizzaD forCrust() {
         return new Crust();
     }
@@ -468,7 +470,7 @@ class Spinach extends PizzaD {
     }
 }
 
-abstract class PieD extends Foo {
+abstract class PieD extends MyToString {
     RemAV raFn = new RemAV();
     abstract PieD remA();
     RemFishV rfFn = new RemFishV();
@@ -480,7 +482,8 @@ abstract class PieD extends Foo {
     SubstV subFn = new SubstV();
     abstract PieD subst(Object src, Object target);
 }
-class RemAV extends Foo {
+
+class RemAV extends MyToString {
     PieD forTopping(Object t, PieD p) {
         if (t instanceof Anchovyy) {
             return p.remA();
@@ -492,7 +495,8 @@ class RemAV extends Foo {
         return new Bottom();
     }
 }
-class RemFishV extends Foo {
+
+class RemFishV extends MyToString {
     PieD forTopping(Object t, PieD p, FishD f) {
         if (f.equals(t)) {
             return p.remFish(f);
@@ -504,7 +508,8 @@ class RemFishV extends Foo {
         return new Bottom();
     }
 }
-class RemIntV extends Foo {
+
+class RemIntV extends MyToString {
     PieD forTopping(Object t, PieD p, Integer i) {
         if (i.equals(t)) {
             return p.remInt(i);
@@ -516,7 +521,8 @@ class RemIntV extends Foo {
         return new Bottom();
     }
 }
-class RemV extends Foo {
+
+class RemV extends MyToString {
     PieD forTopping(Object t, PieD p, Object o) {
         if (o.equals(t)) {
             return p.rem(o);
@@ -528,7 +534,8 @@ class RemV extends Foo {
         return new Bottom();
     }
 }
-class SubstV extends Foo {
+
+class SubstV extends MyToString {
     PieD forTopping(Object t, PieD p, Object src, Object target) {
         if (target.equals(t)) {
             return new Topping(src, p.subst(src, target));
@@ -601,7 +608,7 @@ class Topping extends PieD {
     }
 }
 
-abstract class FishD extends Foo {
+abstract class FishD extends MyToString {
 }
 
 class Anchovyy extends FishD {
