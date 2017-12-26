@@ -488,65 +488,137 @@ class Spinach extends PizzaD {
     }
 }
 
-abstract class PieD extends MyToString {
-    abstract PieD rem(RemV remFn, Object o);
-    abstract PieD subst(SubstV subFn, Object src, Object target);
-}
-
 class RemV extends MyToString {
-    PieD forTopping(Object t, PieD p, Object o) {
+    Object o;
+
+    public RemV() {
+
+    }
+
+    public RemV(Object o) {
+        this.o = o;
+    }
+
+    PieD forTopping(Object t, PieD p) {
         if (o.equals(t)) {
-            return p.rem(this, o);
+            return p.rem(this);
         } else {
-            return new Topping(t, p.rem(this, o));
+            return new Topping(t, p.rem(this));
         }
     }
-    PieD forBottom(Object o) {
+
+    PieD forBottom() {
+        return new Bottom();
+    }
+
+    public PieD forTopping(Object top, PieD rest, Object o) {
+        if (top.equals(o)) {
+            return rest.rem(this, o);
+        } else {
+            return new Topping(top, rest.rem(this, o));
+        }
+    }
+
+    public PieD forBottom(Object o) {
         return new Bottom();
     }
 }
 
 class SubstV extends MyToString {
-    PieD forTopping(Object t, PieD p, Object src, Object target) {
-        if (target.equals(t)) {
-            return new Topping(src, p.subst(this, src, target));
+    Object neue;
+    Object old;
+
+    public SubstV() {
+    }
+
+    public SubstV(Object neue, Object old) {
+        this.neue = neue;
+        this.old = old;
+    }
+
+    PieD forTopping(Object t, PieD rest) {
+        if (old.equals(t)) {
+            return new Topping(neue, rest.subst(this));
         } else {
-            return new Topping(t, p.subst(this, src, target));
+            return new Topping(t, rest.subst(this));
         }
     }
-    PieD forBottom(Object src, Object target) {
+
+    PieD forBottom() {
+        return new Bottom();
+    }
+
+    PieD forTopping(Object top, PieD rest, Object neue, Object old) {
+        if (old.equals(top)) {
+            return new Topping(neue, rest.subst(this, neue, old));
+        } else {
+            return new Topping(top, rest.subst(this, neue, old));
+        }
+    }
+
+    PieD forBottom(Object neue, Object old) {
         return new Bottom();
     }
 }
 
+abstract class PieD extends MyToString {
+    abstract PieD rem(RemV remFn);
+
+    abstract PieD subst(SubstV subFn);
+
+    abstract PieD rem(RemV remFn, Object o);
+
+    abstract PieD subst(SubstV subFn, Object neue, Object old);
+}
+
 class Bottom extends PieD {
+    @Override
+    PieD rem(RemV remFn) {
+        return remFn.forBottom();
+    }
+
+    @Override
+    PieD subst(SubstV subFn) {
+        return subFn.forBottom();
+    }
+
     @Override
     PieD rem(RemV remFn, Object o) {
         return remFn.forBottom(o);
     }
 
     @Override
-    PieD subst(SubstV subFn, Object src, Object target) {
-        return subFn.forBottom(src, target);
+    PieD subst(SubstV subFn, Object neue, Object old) {
+        return subFn.forBottom(neue, old);
     }
 }
 
 class Topping extends PieD {
-    Object t;
-    PieD r;
+    Object top;
+    PieD rest;
     Topping(Object _t, PieD _r) {
-        t = _t;
-        r = _r;
+        top = _t;
+        rest = _r;
     }
     //---------------------------------
     @Override
-    PieD rem(RemV remFn, Object o) {
-        return remFn.forTopping(t, r, o);
+    PieD rem(RemV remFn) {
+        return remFn.forTopping(top, rest);
     }
 
     @Override
-    PieD subst(SubstV subFn, Object src, Object target) {
-        return subFn.forTopping(t, r, src, target);
+    PieD subst(SubstV subFn) {
+        return subFn.forTopping(top, rest);
+    }
+
+    @Override
+    PieD rem(RemV remFn, Object o) {
+        return remFn.forTopping(top, rest, o);
+    }
+
+    @Override
+    PieD subst(SubstV subFn, Object neue, Object old) {
+        return subFn.forTopping(top, rest, neue, old);
     }
 }
 
@@ -618,20 +690,23 @@ public class Main {
                 new Bottom())));
 
         System.out.println(pieD.toString());
-        System.out.println(pieD.rem(new RemV(), new Tuna()));
+        System.out.println(pieD.rem(new RemV(new Tuna())));
 
         PieD pieI = new Topping(new Salmon(),
                 new Topping(new Integer(5),
                 new Topping(new Integer(3),
                 new Bottom())));
         System.out.println(pieI.toString());
-        System.out.println(pieI.rem(new RemV(), 3));
+        System.out.println(pieI.rem(new RemV(3)));
 
         PieD pieA = new Topping(new Anchovyy(),
                 new Topping(new Zero(),
                 new Bottom()));
+        System.out.println();
         System.out.println(pieA);
-        System.out.println(pieA.rem(new RemV(), new Zero()));
+        System.out.println(pieA.rem(new RemV(new Anchovyy())));
+        System.out.println(pieA.subst(new SubstV(new Tuna(), new Zero())));
+        System.out.println(pieA.rem(new RemV(), new Anchovyy()));
         System.out.println(pieA.subst(new SubstV(), new Tuna(), new Zero()));
     }
 }

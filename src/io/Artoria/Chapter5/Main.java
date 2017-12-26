@@ -608,6 +608,7 @@ class Topping extends PieD {
     }
 }
 
+
 abstract class FishD extends MyToString {
 }
 
@@ -657,23 +658,23 @@ public class Main {
 
         PizzaD p = new Sausage(
                 new Olive(
-                new Anchovy(
-                new Anchovy(
-                new Cheese(
-                new Crust())))));
+                        new Anchovy(
+                                new Anchovy(
+                                        new Cheese(
+                                                new Crust())))));
         PizzaD pi = new Sausage(
                 new Olive(
-                new Cheese(
-                new Anchovy(
-                new Crust()))));
+                        new Cheese(
+                                new Anchovy(
+                                        new Crust()))));
         System.out.println(p.removeAnchovy());
         System.out.println(pi.topAnchovyWithCheese());
         System.out.println(pi.substituteAnchovyByCheese());
 
         PieD pieD = new Topping(new Salmon(),
-                new Topping(new Tuna(),
-                new Topping(new Anchovyy(),
-                new Bottom())));
+                                new Topping(new Tuna(),
+                                            new Topping(new Anchovyy(),
+                                                        new Bottom())));
 
         System.out.println(pieD.toString());
         System.out.println(pieD.remA());
@@ -681,16 +682,16 @@ public class Main {
         System.out.println(pieD.rem(new Tuna()));
 
         PieD pieI = new Topping(new Salmon(),
-                new Topping(new Integer(5),
-                new Topping(new Integer(3),
-                new Bottom())));
+                                new Topping(new Integer(5),
+                                            new Topping(new Integer(3),
+                                                        new Bottom())));
         System.out.println(pieI.toString());
         System.out.println(pieI.remInt(3));
         System.out.println(pieI.rem(3));
 
         PieD pieA = new Topping(new Anchovyy(),
-                new Topping(new Zero(),
-                new Bottom()));
+                                new Topping(new Zero(),
+                                            new Bottom()));
         System.out.println(pieA.rem(new Zero()));
         System.out.println(pieA.subst(new Tuna(), new Zero()));
     }

@@ -13,7 +13,8 @@ public class MyToString {
     @Override
     public String toString() {
         String s = "";
-        Field[] fields = getAllFields(getClass());
+        //        Field[] fields = getAllFields(getClass());
+        Field[] fields = this.getClass().getDeclaredFields();
         for(int i = 0; i < fields.length; i++) {
             fields[i].setAccessible(true);
             try {

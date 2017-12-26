@@ -361,7 +361,7 @@ public class Main {
                 new Radish(
                 new Shrimp(
                 new Holder(
-                new Dagger()))));
+                        new Double(1.23456)))));
         System.out.println(
                 pt.toString() + "\n" +
                 n.toString() + "\n" +
