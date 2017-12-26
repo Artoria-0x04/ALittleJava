@@ -488,29 +488,54 @@ class Spinach extends PizzaD {
     }
 }
 
-class RemV extends MyToString {
+abstract class FishD extends MyToString {
+}
+
+class Anchovyy extends FishD {
+    public boolean equals(Object o) {
+        return (o instanceof Anchovyy);
+    }
+}
+
+class Salmon extends FishD {
+    public boolean equals(Object o) {
+        return (o instanceof Salmon);
+    }
+}
+
+class Tuna extends FishD {
+    public boolean equals(Object o) {
+        return (o instanceof Tuna);
+    }
+}
+
+interface PieVisitorI {
+    PieD forTopping(Object top, PieD rest);
+    PieD forBottom();
+}
+
+class RemV extends MyToString implements PieVisitorI {
     Object o;
 
-    public RemV() {
-
-    }
+    public RemV() {}
 
     public RemV(Object o) {
         this.o = o;
     }
 
-    PieD forTopping(Object t, PieD p) {
+    public PieD forTopping(Object t, PieD p) {
         if (o.equals(t)) {
-            return p.rem(this);
+            return p.accept(this);
         } else {
-            return new Topping(t, p.rem(this));
+            return new Topping(t, p.accept(this));
         }
     }
 
-    PieD forBottom() {
+    public PieD forBottom() {
         return new Bottom();
     }
 
+    @Deprecated
     public PieD forTopping(Object top, PieD rest, Object o) {
         if (top.equals(o)) {
             return rest.rem(this, o);
@@ -519,12 +544,13 @@ class RemV extends MyToString {
         }
     }
 
+    @Deprecated
     public PieD forBottom(Object o) {
         return new Bottom();
     }
 }
 
-class SubstV extends MyToString {
+class SubstV extends MyToString implements PieVisitorI {
     Object neue;
     Object old;
 
@@ -536,18 +562,19 @@ class SubstV extends MyToString {
         this.old = old;
     }
 
-    PieD forTopping(Object t, PieD rest) {
-        if (old.equals(t)) {
-            return new Topping(neue, rest.subst(this));
+    public PieD forTopping(Object top, PieD rest) {
+        if (old.equals(top)) {
+            return new Topping(neue, rest.accept(this));
         } else {
-            return new Topping(t, rest.subst(this));
+            return new Topping(top, rest.accept(this));
         }
     }
 
-    PieD forBottom() {
+    public PieD forBottom() {
         return new Bottom();
     }
 
+    @Deprecated
     PieD forTopping(Object top, PieD rest, Object neue, Object old) {
         if (old.equals(top)) {
             return new Topping(neue, rest.subst(this, neue, old));
@@ -555,13 +582,43 @@ class SubstV extends MyToString {
             return new Topping(top, rest.subst(this, neue, old));
         }
     }
-
+    @Deprecated
     PieD forBottom(Object neue, Object old) {
         return new Bottom();
     }
 }
 
+class LimitedSubstV extends MyToString implements PieVisitorI {
+    private int count;
+    Object neue;
+    Object old;
+
+    public LimitedSubstV(int count, Object neue, Object old) {
+        this.count = count;
+        this.neue = neue;
+        this.old = old;
+    }
+    //--------------------------------------------------------
+    public PieD forTopping(Object top, PieD rest) {
+        if (old.equals(top)) {
+            if (count == 0) {
+                return new Topping(top, rest);
+            } else {
+                return new Topping(neue, rest.accept(new LimitedSubstV(count - 1, neue, old)));
+            }
+        } else {
+            return new Topping(top, rest.accept(this));
+        }
+    }
+
+    public PieD forBottom() {
+        return new Bottom();
+    }
+}
+
 abstract class PieD extends MyToString {
+    abstract PieD accept(PieVisitorI ask);
+
     abstract PieD rem(RemV remFn);
 
     abstract PieD subst(SubstV subFn);
@@ -572,6 +629,11 @@ abstract class PieD extends MyToString {
 }
 
 class Bottom extends PieD {
+    @Override
+    PieD accept(PieVisitorI ask) {
+        return ask.forBottom();
+    }
+
     @Override
     PieD rem(RemV remFn) {
         return remFn.forBottom();
@@ -600,7 +662,13 @@ class Topping extends PieD {
         top = _t;
         rest = _r;
     }
+
     //---------------------------------
+    @Override
+    PieD accept(PieVisitorI ask) {
+        return ask.forTopping(top, rest);
+    }
+
     @Override
     PieD rem(RemV remFn) {
         return remFn.forTopping(top, rest);
@@ -621,28 +689,6 @@ class Topping extends PieD {
         return subFn.forTopping(top, rest, neue, old);
     }
 }
-
-abstract class FishD extends MyToString {
-}
-
-class Anchovyy extends FishD {
-    public boolean equals(Object o) {
-        return (o instanceof Anchovyy);
-    }
-}
-
-class Salmon extends FishD {
-    public boolean equals(Object o) {
-        return (o instanceof Salmon);
-    }
-}
-
-class Tuna extends FishD {
-    public boolean equals(Object o) {
-        return (o instanceof Tuna);
-    }
-}
-
 
 public class Main {
 
@@ -699,14 +745,20 @@ public class Main {
         System.out.println(pieI.toString());
         System.out.println(pieI.rem(new RemV(3)));
 
-        PieD pieA = new Topping(new Anchovyy(),
+        PieD pieA =
+                new Topping(new Anchovyy(),
+                new Topping(new Anchovyy(),
+                new Topping(new Anchovyy(),
                 new Topping(new Zero(),
-                new Bottom()));
+                new Bottom()))));
         System.out.println();
         System.out.println(pieA);
         System.out.println(pieA.rem(new RemV(new Anchovyy())));
         System.out.println(pieA.subst(new SubstV(new Tuna(), new Zero())));
         System.out.println(pieA.rem(new RemV(), new Anchovyy()));
         System.out.println(pieA.subst(new SubstV(), new Tuna(), new Zero()));
+        System.out.println(pieA.accept(new SubstV(new Tuna(), new Zero())));
+        System.out.println(pieA.accept(new RemV(new Zero())));
+        System.out.println(pieA.accept(new LimitedSubstV(1, new Zero(), new Anchovyy())));
     }
 }
