@@ -260,6 +260,24 @@ class SetEvalV extends EvalD {
     }
 }
 
+public class Main {
+    public static void main(String[] args) {
+        Expr e1 = new Prod(new Plus(new Const(3),
+                                    new Diff(new Const(5), new Const(6))),
+                           new Const(7));
+        Expr e2 = new Prod(new Plus(new Const(new Empty().add(3)),
+                                    new Diff(new Const(new Empty().add(5).add(6)), new Const(new Empty().add(6).add(7)))),
+                           new Const(new Empty().add(3)));
+        System.out.println("\n" +
+                           e1 + "\n" +
+                           e1.accept(new IntEvalVold()) + "\n" +
+                           e2 + "\n" +
+                           e2.accept(new SetEvalVold()) + "\n" +
+                           ""
+        );
+    }
+}
+
 
 abstract class PieD extends MyToString {
     abstract PieD accept(PieVisitorI ask);
@@ -396,23 +414,5 @@ class LimitedSubstVext extends SubstVOld {
     @Override
     public PieD forBottom() {
         return super.forBottom();
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Expr e1 = new Prod(new Plus(new Const(3),
-                                    new Diff(new Const(5), new Const(6))),
-                           new Const(7));
-        Expr e2 = new Prod(new Plus(new Const(new Empty().add(3)),
-                                    new Diff(new Const(new Empty().add(5).add(6)), new Const(new Empty().add(6).add(7)))),
-                           new Const(new Empty().add(3)));
-        System.out.println("\n" +
-                           e1 + "\n" +
-                           e1.accept(new IntEvalVold()) + "\n" +
-                           e2 + "\n" +
-                           e2.accept(new SetEvalVold()) + "\n" +
-                           ""
-        );
     }
 }
